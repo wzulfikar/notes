@@ -25,6 +25,7 @@ async function backupComments({ path, gist_id }) {
 }
 
 (async () => {
+  console.log("Fetching gists..")
   const promises: Promise<any>[] = []
   for (const path in gists) {
     promises.push(backupGist({ path, gist_id: gists[path] }))
