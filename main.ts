@@ -13,7 +13,7 @@ const gists = {
 async function backupGist({ path, gist_id }) {
   const { files } = await getGist({ gist_id })
   for (const filename in files) {
-    fs.writeFileSync(`./gists/${path}/${filename}`, files[filename]?.content!)
+    fs.writeFileSync(`./gists/${path}/README.md`, files[filename]?.content!)
   }
 }
 
