@@ -1,5 +1,6 @@
 import fs from "fs"
 import { listComments } from "./lib/list-comments";
+import { getGist } from './lib/get-gist';
 
 const gists = {
   "problem-based": "ba2f58d7aeeb3cf53743316f96f91594",
@@ -9,14 +10,24 @@ const gists = {
   electronics: "16c3b5f10b8f28d8b0e325d03c948d1c",
 };
 
+async function backupGist({ path, gist_id }) {
+  const { files } = await getGist({ gist_id })
+  for (const filename in files) {
+    fs.writeFileSync(`./gists/${path}/${filename}`, files[filename]?.content!)
+  }
+}
+
 async function backupComments({ path, gist_id }) {
   const comments = await listComments({ gist_id })
-  fs.writeFileSync(`./gists/${path}/comments.json`, JSON.stringify(comments))
+  comments.forEach(({ id, body }) => {
+    fs.writeFileSync(`./gists/${path}/${id}.md`, body)
+  })
 }
 
 (async () => {
   const promises: Promise<any>[] = []
   for (const path in gists) {
+    promises.push(backupGist({ path, gist_id: gists[path] }))
     promises.push(backupComments({ path, gist_id: gists[path] }))
   }
   await Promise.all(promises)
