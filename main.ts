@@ -9,7 +9,7 @@ const gists = {
   electronics: "16c3b5f10b8f28d8b0e325d03c948d1c",
 };
 
-async function getComments({ path, gist_id }) {
+async function backupComments({ path, gist_id }) {
   const comments = await listComments({ gist_id })
   fs.writeFileSync(`./gists/${path}/comments.json`, JSON.stringify(comments))
 }
@@ -17,7 +17,7 @@ async function getComments({ path, gist_id }) {
 (async () => {
   const promises: Promise<any>[] = []
   for (const path in gists) {
-    promises.push(getComments({ path, gist_id: gists[path] }))
+    promises.push(backupComments({ path, gist_id: gists[path] }))
   }
   await Promise.all(promises)
   console.log("Done!")
