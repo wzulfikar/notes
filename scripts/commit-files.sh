@@ -1,10 +1,10 @@
 #!/bin/sh
 
-function list_untracked_problem_files() {
-  git status --porcelain | awk '/^\?\?/ { print $2; }' | grep 'gists/problem-based/'
+function list_changed_files() {
+  git status --porcelain | awk '{ print $2; }' | grep 'gists/'
 }
 
-function get_commit_message() {
+function create_commit_message() {
   local file=$1
   line=$(grep -E 'Problem:|TIL:' $file)
   message=$(echo $line | awk -F '|' '{print $3}' | xargs)
@@ -16,8 +16,8 @@ function get_commit_message() {
   fi
 }
 
-list_untracked_problem_files | while read file; do
-  commit_message=$(get_commit_message $file)
+list_changed_files | while read file; do
+  commit_message=$(create_commit_message $file)
   git add $file
   git commit -m "$commit_message"
 done
