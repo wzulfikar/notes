@@ -6,18 +6,28 @@ function list_changed_files() {
 
 function create_commit_message() {
   local file=$1
-  line=$(grep -E 'Problem:|TIL:' $file)
-  message=$(echo $line | awk -F '|' '{print $3}' | xargs)
 
-  if $(echo $line | grep -q Problem); then
-    echo "🧶 $message"
+  if [[ "$file" = gists/problem-based/* ]]; then
+    line=$(grep -E 'Problem:|TIL:' $file)
+    message=$(echo $line | awk -F '|' '{print $3}' | xargs)
+    if $(echo $line | grep -q Problem); then
+      echo "🧶 $message"
+    else
+      echo "💡 $message"
+    fi
   else
-    echo "💡 $message"
+    line=$(grep '<h2 align=center>' $file)
+    message=$(echo $line | sed 's#<h2 align=center>##;s#</h2>##;')
+    echo $message
   fi
 }
 
 list_changed_files | while read file; do
   commit_message=$(create_commit_message $file)
-  git add $file
-  git commit -m "$commit_message"
+  if [ "$DRY_RUN " ]; then
+    echo "$file → $commit_message"
+  else
+    git add $file
+    git commit -m "$commit_message"
+  fi
 done
