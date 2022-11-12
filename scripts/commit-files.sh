@@ -24,7 +24,7 @@ function create_commit_message() {
 
 list_changed_files | while read file; do
   commit_message=$(create_commit_message $file)
-  if [ "$DRY_RUN " ]; then
+  if [ "$DRY_RUN" ]; then
     echo "$file → $commit_message"
   else
     git add $file
