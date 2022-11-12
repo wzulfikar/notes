@@ -1,6 +1,5 @@
-import fs from "fs"
-import { listComments } from "./lib/list-comments";
-import { getGist } from './lib/get-gist';
+import { backupComments } from "./lib/backup-comments";
+import { backupGist } from './lib/backup-gist';
 
 const gists = {
   "problem-based": "ba2f58d7aeeb3cf53743316f96f91594",
@@ -9,20 +8,6 @@ const gists = {
   challenges: "7d5e9426d1c7efc3ceeabb29adb2f4fd",
   electronics: "16c3b5f10b8f28d8b0e325d03c948d1c",
 };
-
-async function backupGist({ path, gist_id }) {
-  const { files } = await getGist({ gist_id })
-  for (const filename in files) {
-    fs.writeFileSync(`./gists/${path}/README.md`, files[filename]?.content!)
-  }
-}
-
-async function backupComments({ path, gist_id }) {
-  const comments = await listComments({ gist_id })
-  comments.forEach(({ id, body }) => {
-    fs.writeFileSync(`./gists/${path}/${id}.md`, body)
-  })
-}
 
 (async () => {
   console.log("Fetching gists..")
