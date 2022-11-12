@@ -1,5 +1,3 @@
-TBD
-
 <p align="center">▲▼▲</p>
 
 This gist is a part of my [public notes](https://gist.github.com/wzulfikar/ba2f58d7aeeb3cf53743316f96f91594). Here's the "sitemap" of the notes:
