@@ -17,7 +17,7 @@ function create_commit_message() {
     fi
   else
     line=$(grep '<h2 align=center>' $file)
-    message=$(echo $line | sed 's#<h2 align=center>##;s#</h2>##;')
+    message=$(echo $line | sed 's#<h2 align=center>##;s#</h2>##;s#<code>##;s#</code>##')
     echo $message
   fi
 }
